@@ -61,67 +61,41 @@ const CustomAbsIcon = ({ size = 32, weight = 'regular', className = '' }: {
 
 export interface InputTCABSProps {
   absActive?: boolean;
-  tcActive?: boolean;
-  absSetting?: number;
-  tcSetting?: number;
   settings?: {
     enabled: boolean;
-    showSettings: boolean;
   };
-  // New prop to choose icon style
   iconStyle?: 'default' | 'automotive' | 'technical' | 'safety' | 'modern' | 'custom';
 }
 
 export const InputTCABS = ({ 
   absActive = false, 
-  tcActive = false, 
-  absSetting = 0, 
-  tcSetting = 0,
-  settings = { enabled: true, showSettings: true },
+  settings = { enabled: true },
   iconStyle = 'default'
 }: InputTCABSProps) => {
   if (!settings.enabled) return null;
 
   // Icon selection based on style
-  const getIcons = () => {
+  const getAbsIcon = () => {
     switch (iconStyle) {
       case 'automotive':
-        return {
-          abs: Circle,
-          tc: Gauge
-        };
+        return Circle;
       case 'technical':
-        return {
-          abs: Cpu,
-          tc: Lightning
-        };
+        return Cpu;
       case 'safety':
-        return {
-          abs: Warning,
-          tc: CheckCircle
-        };
+        return Warning;
       case 'modern':
-        return {
-          abs: Circle,
-          tc: CarProfile
-        };
+        return Circle;
       case 'custom':
-        return {
-          abs: CustomAbsIcon,
-          tc: Gauge
-        };
+        return CustomAbsIcon;
       default:
-        return {
-          abs: Shield,
-          tc: Car
-        };
+        return Shield;
     }
   };
 
-  const { abs: AbsIcon, tc: TcIcon } = getIcons();
+  const AbsIcon = getAbsIcon();
 
   return (
-    <div className="flex flex-row justify-between h-full items-center py-2 gap-2">
+    <div className="flex flex-row justify-center h-full items-center py-2 gap-2 w-full">
       {/* ABS Indicator */}
       <div className="flex flex-col items-center justify-center flex-1 h-full">
         <div className={`flex flex-col items-center gap-2 ${absActive ? 'text-red-400' : 'text-gray-500'}`}>
@@ -130,44 +104,7 @@ export const InputTCABS = ({
             weight={absActive ? 'fill' : 'regular'}
             className={`transition-all duration-200 ${absActive ? 'text-red-400 drop-shadow-lg' : 'text-gray-500'}`}
           />
-          <span className="text-sm font-bold">ABS</span>
         </div>
-        {settings.showSettings && absSetting > 0 && (
-          <div className="flex gap-1 mt-2">
-            {[1, 2, 3].map((level) => (
-              <div
-                key={level}
-                className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                  level <= absSetting ? 'bg-red-400' : 'bg-gray-600'
-                }`}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* TC Indicator */}
-      <div className="flex flex-col items-center justify-center flex-1 h-full">
-        <div className={`flex flex-col items-center gap-2 ${tcActive ? 'text-yellow-400' : 'text-gray-500'}`}>
-          <TcIcon 
-            size={48} 
-            weight={tcActive ? 'fill' : 'regular'}
-            className={`transition-all duration-200 ${tcActive ? 'text-yellow-400 drop-shadow-lg' : 'text-gray-500'}`}
-          />
-          <span className="text-sm font-bold">TC</span>
-        </div>
-        {settings.showSettings && tcSetting > 0 && (
-          <div className="flex gap-1 mt-2">
-            {[1, 2, 3].map((level) => (
-              <div
-                key={level}
-                className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                  level <= tcSetting ? 'bg-yellow-400' : 'bg-gray-600'
-                }`}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

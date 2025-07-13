@@ -11,9 +11,6 @@ export interface InputProps {
   speed?: number;
   unit?: number;
   absActive?: boolean;
-  tcActive?: boolean;
-  absSetting?: number;
-  tcSetting?: number;
   settings?: InputSettings;
 }
 
@@ -35,7 +32,6 @@ export interface InputSettings {
   };
   tcabs: {
     enabled: boolean;
-    showSettings: boolean;
   };
 }
 
@@ -47,9 +43,6 @@ export const InputContainer = ({
   speed,
   unit,
   absActive,
-  tcActive,
-  absSetting,
-  tcSetting,
   settings,
 }: InputProps) => {
   return (
@@ -60,9 +53,6 @@ export const InputContainer = ({
       <div className="w-32">
         <InputTCABS 
           absActive={absActive} 
-          tcActive={tcActive} 
-          absSetting={absSetting} 
-          tcSetting={tcSetting}
           settings={settings?.tcabs}
           iconStyle="custom"
         />

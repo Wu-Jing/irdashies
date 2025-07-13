@@ -15,9 +15,6 @@ type Story = StoryObj<typeof InputTCABS>;
 export const Default: Story = {
   args: {
     absActive: false,
-    tcActive: false,
-    absSetting: 0,
-    tcSetting: 0,
     settings: {
       enabled: true,
       showSettings: true,
@@ -29,37 +26,6 @@ export const Default: Story = {
 export const ABSActive: Story = {
   args: {
     absActive: true,
-    tcActive: false,
-    absSetting: 2,
-    tcSetting: 0,
-    settings: {
-      enabled: true,
-      showSettings: true,
-    },
-    iconStyle: 'default',
-  },
-};
-
-export const TCActive: Story = {
-  args: {
-    absActive: false,
-    tcActive: true,
-    absSetting: 0,
-    tcSetting: 3,
-    settings: {
-      enabled: true,
-      showSettings: true,
-    },
-    iconStyle: 'default',
-  },
-};
-
-export const BothActive: Story = {
-  args: {
-    absActive: true,
-    tcActive: true,
-    absSetting: 1,
-    tcSetting: 2,
     settings: {
       enabled: true,
       showSettings: true,
@@ -71,9 +37,6 @@ export const BothActive: Story = {
 export const NoSettings: Story = {
   args: {
     absActive: true,
-    tcActive: true,
-    absSetting: 2,
-    tcSetting: 1,
     settings: {
       enabled: true,
       showSettings: false,
@@ -84,9 +47,6 @@ export const NoSettings: Story = {
 export const Disabled: Story = {
   args: {
     absActive: true,
-    tcActive: true,
-    absSetting: 3,
-    tcSetting: 3,
     settings: {
       enabled: false,
       showSettings: true,
@@ -98,9 +58,6 @@ export const Disabled: Story = {
 export const DefaultIcons: Story = {
   args: {
     absActive: true,
-    tcActive: true,
-    absSetting: 2,
-    tcSetting: 3,
     settings: {
       enabled: true,
       showSettings: true,
@@ -112,9 +69,6 @@ export const DefaultIcons: Story = {
 export const AutomotiveIcons: Story = {
   args: {
     absActive: true,
-    tcActive: true,
-    absSetting: 2,
-    tcSetting: 3,
     settings: {
       enabled: true,
       showSettings: true,
@@ -126,9 +80,6 @@ export const AutomotiveIcons: Story = {
 export const TechnicalIcons: Story = {
   args: {
     absActive: true,
-    tcActive: true,
-    absSetting: 2,
-    tcSetting: 3,
     settings: {
       enabled: true,
       showSettings: true,
@@ -140,9 +91,6 @@ export const TechnicalIcons: Story = {
 export const SafetyIcons: Story = {
   args: {
     absActive: true,
-    tcActive: true,
-    absSetting: 2,
-    tcSetting: 3,
     settings: {
       enabled: true,
       showSettings: true,
@@ -154,9 +102,6 @@ export const SafetyIcons: Story = {
 export const ModernIcons: Story = {
   args: {
     absActive: true,
-    tcActive: true,
-    absSetting: 2,
-    tcSetting: 3,
     settings: {
       enabled: true,
       showSettings: true,
@@ -168,59 +113,12 @@ export const ModernIcons: Story = {
 export const CustomIcons: Story = {
   args: {
     absActive: true,
-    tcActive: true,
-    absSetting: 2,
-    tcSetting: 3,
     settings: {
       enabled: true,
       showSettings: true,
     },
     iconStyle: 'custom',
   },
-};
-
-// Story with simulated changing data
-const SimulatedData = () => {
-  const [absActive, setAbsActive] = useState(false);
-  const [tcActive, setTcActive] = useState(false);
-  const [absSetting, setAbsSetting] = useState(0);
-  const [tcSetting, setTcSetting] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Simulate realistic ABS/TC behavior
-      setAbsActive(Math.random() > 0.7);
-      setTcActive(Math.random() > 0.6);
-      
-      // Occasionally change settings
-      if (Math.random() > 0.95) {
-        setAbsSetting(Math.floor(Math.random() * 4));
-      }
-      if (Math.random() > 0.95) {
-        setTcSetting(Math.floor(Math.random() * 4));
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <InputTCABS
-      absActive={absActive}
-      tcActive={tcActive}
-      absSetting={absSetting}
-      tcSetting={tcSetting}
-      settings={{
-        enabled: true,
-        showSettings: true,
-      }}
-      iconStyle="default"
-    />
-  );
-};
-
-export const Simulated: Story = {
-  render: () => <SimulatedData />,
 };
 
 // Icon Style Comparison
@@ -237,9 +135,6 @@ const IconStyleComparison = () => {
             <div className="h-32 w-20 border border-gray-300 rounded">
               <InputTCABS
                 absActive={true}
-                tcActive={true}
-                absSetting={2}
-                tcSetting={3}
                 settings={{
                   enabled: true,
                   showSettings: true,

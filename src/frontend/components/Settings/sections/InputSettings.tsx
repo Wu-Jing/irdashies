@@ -27,8 +27,7 @@ export const InputSettings = () => {
       unit: 'auto',
     },
     tcabs: {
-      enabled: true,
-      showSettings: true,
+      enabled: true
     },
   };
 
@@ -50,7 +49,7 @@ export const InputSettings = () => {
   return (
     <BaseSettingsSection<InputSettingsType>
       title="Input Traces Settings"
-      description="Configure the input traces display settings for throttle, brake, clutch, ABS, and TC."
+      description="Configure the input traces display settings for throttle, brake, clutch, and ABS."
       settings={settings}
       onSettingsChange={setSettings}
       widgetId="input"
@@ -201,12 +200,12 @@ export const InputSettings = () => {
             )}
           </div>
 
-          {/* TC/ABS Settings */}
+          {/* ABS Settings */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium text-slate-200">TC/ABS Settings</h3>
+              <h3 className="text-lg font-medium text-slate-200">ABS Settings</h3>
               <div className="flex items-center gap-3">
-                <span className="text-sm text-slate-300">Enable TC/ABS Display</span>
+                <span className="text-sm text-slate-300">Enable ABS Display</span>
                 <ToggleSwitch
                   enabled={config.tcabs.enabled}
                   onToggle={(enabled) =>
@@ -215,23 +214,6 @@ export const InputSettings = () => {
                 />
               </div>
             </div>
-            {config.tcabs.enabled && (
-              <div className="space-y-2 pl-4 pt-2">
-                <label className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    checked={config.tcabs.showSettings}
-                    onChange={(e) =>
-                      handleConfigChange({
-                        tcabs: { ...config.tcabs, showSettings: e.target.checked },
-                      })
-                    }
-                    className="form-checkbox h-4 w-4 text-blue-500 rounded border-slate-500 bg-slate-700"
-                  />
-                  <span className="text-sm text-slate-200">Show TC/ABS Settings Level</span>
-                </label>
-              </div>
-            )}
           </div>
         </div>
       )}
