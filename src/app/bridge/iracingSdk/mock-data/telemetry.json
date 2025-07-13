@@ -4665,6 +4665,17 @@
       0
     ]
   },
+  "dcABS": {
+    "countAsTime": false,
+    "length": 1,
+    "name": "dcABS",
+    "description": "In car abs adjustment",
+    "unit": "",
+    "varType": 4,
+    "value": [
+      0
+    ]
+  },
   "dcThrottleShape": {
     "countAsTime": false,
     "length": 1,

@@ -7,11 +7,38 @@ import { InputSettings as InputSettingsType } from '../../Input/InputContainer/I
 
 export const InputSettings = () => {
   const { currentDashboard } = useDashboard();
+  
+  // Get existing config and ensure tcabs settings exist
+  const existingConfig = currentDashboard?.widgets.find((w) => w.id === 'input')?.config as any;
+  const defaultConfig: InputSettingsType = {
+    trace: {
+      enabled: true,
+      includeThrottle: true,
+      includeBrake: true,
+    },
+    bar: {
+      enabled: true,
+      includeClutch: true,
+      includeBrake: true,
+      includeThrottle: true,
+    },
+    gear: {
+      enabled: true,
+      unit: 'auto',
+    },
+    tcabs: {
+      enabled: true,
+      showSettings: true,
+    },
+  };
+
   const [settings, setSettings] = useState<InputWidgetSettings>({
-    enabled:
-      currentDashboard?.widgets.find((w) => w.id === 'input')?.enabled ?? false,
-    config: ((currentDashboard?.widgets.find((w) => w.id === 'input')
-      ?.config as unknown) as InputSettingsType),
+    enabled: currentDashboard?.widgets.find((w) => w.id === 'input')?.enabled ?? false,
+    config: {
+      ...defaultConfig,
+      ...existingConfig,
+      tcabs: existingConfig?.tcabs || defaultConfig.tcabs,
+    },
   });
 
   if (!currentDashboard) {
@@ -23,7 +50,7 @@ export const InputSettings = () => {
   return (
     <BaseSettingsSection<InputSettingsType>
       title="Input Traces Settings"
-      description="Configure the input traces display settings for throttle, brake, and clutch."
+      description="Configure the input traces display settings for throttle, brake, clutch, ABS, and TC."
       settings={settings}
       onSettingsChange={setSettings}
       widgetId="input"
@@ -170,6 +197,39 @@ export const InputSettings = () => {
                     <option value="km/h">km/h</option>
                   </select>
                 </div>
+              </div>
+            )}
+          </div>
+
+          {/* TC/ABS Settings */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium text-slate-200">TC/ABS Settings</h3>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-slate-300">Enable TC/ABS Display</span>
+                <ToggleSwitch
+                  enabled={config.tcabs.enabled}
+                  onToggle={(enabled) =>
+                    handleConfigChange({ tcabs: { ...config.tcabs, enabled } })
+                  }
+                />
+              </div>
+            </div>
+            {config.tcabs.enabled && (
+              <div className="space-y-2 pl-4 pt-2">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={config.tcabs.showSettings}
+                    onChange={(e) =>
+                      handleConfigChange({
+                        tcabs: { ...config.tcabs, showSettings: e.target.checked },
+                      })
+                    }
+                    className="form-checkbox h-4 w-4 text-blue-500 rounded border-slate-500 bg-slate-700"
+                  />
+                  <span className="text-sm text-slate-200">Show TC/ABS Settings Level</span>
+                </label>
               </div>
             )}
           </div>

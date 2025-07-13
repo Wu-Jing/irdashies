@@ -18,7 +18,16 @@ export const useInputSettings = () => {
     typeof inputSettings.bar === 'object' &&
     typeof inputSettings.gear === 'object'
   ) {
-    return inputSettings as unknown as InputSettings;
+    // Handle missing tcabs settings for existing dashboards
+    const settings = inputSettings as any;
+    const defaultSettings: InputSettings = {
+      trace: settings.trace,
+      bar: settings.bar,
+      gear: settings.gear,
+      tcabs: settings.tcabs || { enabled: true, showSettings: true }
+    };
+    
+    return defaultSettings;
   }
 
   return undefined;

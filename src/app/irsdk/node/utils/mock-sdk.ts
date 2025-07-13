@@ -8,6 +8,12 @@ import { loadMockSessionData, loadMockTelemetry } from './mock-data/loader';
 let mockTelemetry: TelemetryVarList | null = null;
 let MOCK_SESSION: string | null = null;
 
+// Track ABS/TC state for realistic simulation
+let absActive = false;
+let tcActive = false;
+let absSetting = 0;
+let tcSetting = 0;
+
 export class MockSDK implements INativeSDK {
   public currDataVersion: number;
 
@@ -58,8 +64,67 @@ export class MockSDK implements INativeSDK {
   }
 
   public getTelemetryData(): TelemetryVarList {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return mockTelemetry!;
+    if (!mockTelemetry) {
+      return {} as TelemetryVarList;
+    }
+
+    // Get current brake and throttle values
+    const brakeValue = mockTelemetry.Brake?.value?.[0] ?? 0;
+    const throttleValue = mockTelemetry.Throttle?.value?.[0] ?? 0;
+
+    // Simulate realistic ABS/TC behavior
+    // ABS activates when braking hard
+    if (brakeValue > 0.7 && Math.random() > 0.7) {
+      absActive = true;
+    } else if (brakeValue < 0.3) {
+      absActive = false;
+    }
+    
+    // TC activates when accelerating hard
+    if (throttleValue > 0.8 && Math.random() > 0.6) {
+      tcActive = true;
+    } else if (throttleValue < 0.4) {
+      tcActive = false;
+    }
+    
+    // Randomly change settings occasionally
+    if (Math.random() > 0.95) {
+      absSetting = Math.floor(Math.random() * 4); // 0-3
+    }
+    if (Math.random() > 0.95) {
+      tcSetting = Math.floor(Math.random() * 4); // 0-3
+    }
+
+    // Create dynamic telemetry data with ABS/TC
+    const dynamicTelemetry = {
+      ...mockTelemetry,
+      BrakeABSactive: {
+        ...mockTelemetry.BrakeABSactive,
+        value: [absActive],
+      },
+    } as any;
+
+    // Add ABS/TC fields if they exist
+    if ((mockTelemetry as any).dcTractionControlToggle) {
+      dynamicTelemetry.dcTractionControlToggle = {
+        ...(mockTelemetry as any).dcTractionControlToggle,
+        value: [tcActive],
+      };
+    }
+    if ((mockTelemetry as any).dcABS) {
+      dynamicTelemetry.dcABS = {
+        ...(mockTelemetry as any).dcABS,
+        value: [absSetting],
+      };
+    }
+    if ((mockTelemetry as any).dcTractionControl) {
+      dynamicTelemetry.dcTractionControl = {
+        ...(mockTelemetry as any).dcTractionControl,
+        value: [tcSetting],
+      };
+    }
+
+    return dynamicTelemetry;
   }
 
   public getTelemetryVariable<T extends boolean | number | string>(index: number): TelemetryVariable<T[]>;
@@ -69,11 +134,11 @@ export class MockSDK implements INativeSDK {
 
   // Really need to fix the types here.
   public getTelemetryVariable<T extends boolean | number | string>(name: keyof TelemetryVarList | number): TelemetryVariable<T[]> {
+    const telemetryData = this.getTelemetryData();
     if (typeof name === 'number') {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return Object.values(mockTelemetry!)[name] as TelemetryVariable<T[]>;
+      return Object.values(telemetryData)[name] as TelemetryVariable<T[]>;
     }
-    return mockTelemetry?.[name] as TelemetryVariable<T[]>;
+    return telemetryData[name] as TelemetryVariable<T[]>;
   }
 
   public broadcast(message: BroadcastMessages.CameraSwitchPos, pos: number, group: number, camera: number): void;

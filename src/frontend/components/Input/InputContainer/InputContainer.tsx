@@ -1,6 +1,7 @@
 import { InputBar } from '../InputBar/InputBar';
 import { InputGear } from '../InputGear/InputGear';
 import { InputTrace } from '../InputTrace/InputTrace';
+import { InputTCABS } from '../InputTCABS/InputTCABS';
 
 export interface InputProps {
   brake?: number;
@@ -9,6 +10,10 @@ export interface InputProps {
   gear?: number;
   speed?: number;
   unit?: number;
+  absActive?: boolean;
+  tcActive?: boolean;
+  absSetting?: number;
+  tcSetting?: number;
   settings?: InputSettings;
 }
 
@@ -28,6 +33,10 @@ export interface InputSettings {
     enabled: boolean;
     unit: 'mph' | 'km/h' | 'auto';
   };
+  tcabs: {
+    enabled: boolean;
+    showSettings: boolean;
+  };
 }
 
 export const InputContainer = ({
@@ -37,6 +46,10 @@ export const InputContainer = ({
   gear,
   speed,
   unit,
+  absActive,
+  tcActive,
+  absSetting,
+  tcSetting,
   settings,
 }: InputProps) => {
   return (
@@ -44,6 +57,16 @@ export const InputContainer = ({
       {settings?.trace.enabled && <InputTrace input={{ brake, throttle }} settings={settings.trace} />}
       {settings?.bar.enabled && <InputBar brake={brake} throttle={throttle} clutch={clutch} settings={settings.bar} />}
       {settings?.gear.enabled && <InputGear gear={gear} speedMs={speed} unit={unit} settings={settings.gear} />}
+      <div className="w-32">
+        <InputTCABS 
+          absActive={absActive} 
+          tcActive={tcActive} 
+          absSetting={absSetting} 
+          tcSetting={tcSetting}
+          settings={settings?.tcabs}
+          iconStyle="custom"
+        />
+      </div>
       {/* <InputSteer /> */} {/* WIP */}
     </div>
   );

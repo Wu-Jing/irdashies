@@ -45,6 +45,10 @@ export const defaultDashboard: DashboardLayout = {
           enabled: true,
           unit: 'auto',
         },
+        tcabs: {
+          enabled: true,
+          showSettings: true,
+        },
       },
     },
     {
