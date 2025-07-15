@@ -18,26 +18,29 @@ import {
 
 // Custom ABS icon component
 const CustomAbsIcon = ({ size = 32, weight = 'regular', className = '' }: { 
-  size?: number; 
+  size?: number; // ignored, use parent's size
   weight?: 'regular' | 'fill'; 
   className?: string;
 }) => {
   const isActive = weight === 'fill';
   const strokeWidth = isActive ? 2 : 1.5;
-  
+  // SVG matches InputBar: width=120, no height
   return (
     <svg 
-      width={size} 
-      height={size} 
-      viewBox="0 0 32 32" 
+      width="120"
+      viewBox="0 0 58 100" 
       className={className}
       fill="none"
+      style={{ display: 'block' }}
+      preserveAspectRatio="xMidYMid meet"
     >
-      {/* Circle background */}
-      <circle 
-        cx="16" 
-        cy="16" 
-        r="14" 
+      {/* Rectangle background */}
+      <rect 
+        x="2" 
+        y="2" 
+        width="54" 
+        height="96" 
+        rx="16" 
         stroke="currentColor" 
         strokeWidth={strokeWidth}
         fill={isActive ? "currentColor" : "none"}
@@ -45,13 +48,14 @@ const CustomAbsIcon = ({ size = 32, weight = 'regular', className = '' }: {
       />
       {/* ABS text */}
       <text 
-        x="16" 
-        y="20" 
+        x="29" 
+        y="54" 
         textAnchor="middle" 
-        fontSize="8" 
+        fontSize="24" 
         fontWeight="bold"
         fill="currentColor"
         className="select-none"
+        dominantBaseline="middle"
       >
         ABS
       </text>
@@ -100,7 +104,6 @@ export const InputTCABS = ({
       <div className="flex flex-col items-center justify-center flex-1 h-full">
         <div className={`flex flex-col items-center gap-2 ${absActive ? 'text-red-400' : 'text-gray-500'}`}>
           <AbsIcon 
-            size={48} 
             weight={absActive ? 'fill' : 'regular'}
             className={`transition-all duration-200 ${absActive ? 'text-red-400 drop-shadow-lg' : 'text-gray-500'}`}
           />

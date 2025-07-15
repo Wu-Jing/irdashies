@@ -50,7 +50,7 @@ export const InputContainer = ({
       {settings?.trace.enabled && <InputTrace input={{ brake, throttle }} settings={settings.trace} />}
       {settings?.bar.enabled && <InputBar brake={brake} throttle={throttle} clutch={clutch} settings={settings.bar} />}
       {settings?.gear.enabled && <InputGear gear={gear} speedMs={speed} unit={unit} settings={settings.gear} />}
-      <div className="w-32">
+      <div className="flex-1 h-full flex items-center justify-center">
         <InputTCABS 
           absActive={absActive} 
           settings={settings?.tcabs}
